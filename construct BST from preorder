@@ -1,0 +1,25 @@
+class Solution {
+public: 
+   TreeNode* construct(vector<int>&preorder,vector<int>&inorder,int instart,int inend, int prestart ,int preend,unordered_map<int,int>&m){
+    if(prestart>preend || instart>inend){
+        return nullptr;
+    }
+    TreeNode*root=new TreeNode(preorder[prestart]);
+    int index=m[preorder[prestart]];
+    int numleft=index-instart;
+    root->left=construct(preorder,inorder,instart,index-1,prestart+1,prestart+numleft,m);
+    root->right=construct(preorder,inorder,index+1,inend,prestart+numleft+1,preend,m);
+    return root;
+   }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        vector<int>inorder=preorder;
+        sort(inorder.begin(),inorder.end());
+        unordered_map<int,int>m;
+        for(int i=0;i<inorder.size();i++){
+            m[inorder[i]]=i;
+        }
+
+        return construct(preorder,inorder,0,inorder.size()-1,0,preorder.size()-1,m);
+        
+    }
+};
